@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Hack-Bold;
+  src: url(/src/fonts/Hack-Bold.ttf);
+}
+
 body *, body {
   margin: 0;
   padding: 0;
@@ -6,6 +11,7 @@ body *, body {
 
 body {
   background: black;
+  font-family: Hack-Bold;
 }
 
 .container {
