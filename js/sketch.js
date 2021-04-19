@@ -34,7 +34,7 @@ class Sketch extends Engine {
       const alpha = r > this._max_faded_r == 1 ? 1 : (r / this._max_faded_r); // text transparency
       const d_theta = Math.PI * 2 / this._letters.length; // angle between letters
       const size = 2 * Math.PI * r / this._letters.length * 1.4; // text size
-      const d_phi = Math.PI * 2 * this.easeInOut(this._frameCount / this._duration) * count; // "line" rotation
+      const d_phi = Math.PI * 2 * this.easeInOut(this._frameCount / this._duration) * count - Math.PI; // "line" rotation
       const dir = count % 2 == 0 ? 1 : -1; // rotation direction
 
       this._ctx.rotate(d_phi * dir);
