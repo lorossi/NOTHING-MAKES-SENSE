@@ -5,8 +5,9 @@ class Sketch extends Engine {
     this._min_size = 20;
     this._max_faded_r = 400;
     this._duration = 900;
-    this._recording = true;
     this._titles = ["LOOK AROUND YOU", "NOTHING MAKES SENSE", "BUT HAS IT EVER?"];
+    this._recording = false;
+    this._show_fps = false;
     // internal variables
     this._letters = this._titles.join(" ").split("");
     this._letters.push(" ");
@@ -14,13 +15,19 @@ class Sketch extends Engine {
     // initialize page
     console.clear();
     document.title = this._titles[0];
+    // setup capturer
+    if (this._recording) {
+      this._capturer = new CCapture({ format: "png" });
+      this._capturer_started = false;
+    }
   }
 
   draw() {
     // check if record has ended
-    if (this._frameCount > this._duration && this._recording) {
-      this._recording = false;
-      console.log("%c ENDED", "color: red; font-size: 2rem");
+    if (!this._capturer_started && this._recording) {
+      this._capturer_started = true;
+      this._capturer.start();
+      console.log("%c Recording started", "color: green; font-size: 2rem");
     }
 
     this._ctx.save();
@@ -55,24 +62,32 @@ class Sketch extends Engine {
       count++;
       r -= r * 0.15;
     }
-
-
     this._ctx.restore();
 
-    /*
-    this._ctx.fillStyle = "red";
-    this._ctx.fillText(this._frameRate, 30, 30);
-    */
-
     // check if it's time to change the title
-    if (this._frameCount % 30 == 0) {
+    if (this._frameCount % 60 == 0) {
       const index = parseInt(this._frameCount / 30) % this._titles.length;
       document.title = this._titles[index];
     }
 
-    // if it's needed, save the frame
+    // show FPS
+    if (this._show_fps) {
+      this._ctx.save();
+      this._ctx.fillStyle = "red";
+      this._ctx.font = "30px Hack";
+      this._ctx.fillText(parseInt(this._frameRate), 40, 40);
+      this._ctx.restore();
+    }
+    // handle recording
     if (this._recording) {
-      this.saveFrame();
+      if (this._frameCount <= this._duration) {
+        this._capturer.capture(this._canvas);
+      } else {
+        this._recording = false;
+        this._capturer.stop();
+        this._capturer.save();
+        console.log("%c Recording ended", "color: red; font-size: 2rem");
+      }
     }
   }
 
