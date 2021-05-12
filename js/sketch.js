@@ -4,9 +4,9 @@ class Sketch extends Engine {
     // parameters
     this._min_size = 20;
     this._max_faded_r = 400;
-    this._duration = 900;
+    this._duration = 600;
     this._titles = ["LOOK AROUND YOU", "NOTHING MAKES SENSE", "BUT HAS IT EVER?"];
-    this._recording = false;
+    this._recording = true;
     this._show_fps = false;
     // internal variables
     this._letters = this._titles.join(" ").split("");
